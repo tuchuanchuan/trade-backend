@@ -12,7 +12,7 @@ from tools.utils import ControllerLoader
 
 
 def main():
-    handler_list = ControllerLoader().discover("controllers", urls_py='urls')
+    handler_list = ControllerLoader().discover("controllers_backend", urls_py='urls')
     logging.info(handler_list)
     application_settings = dict(
         cookie_secret=settings.COOKIE_SECRET,

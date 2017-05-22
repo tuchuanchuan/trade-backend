@@ -11,4 +11,5 @@ class Tag(ORMBase):
     id = Column(Integer, primary_key=True, nullable=False, )
 
     name = Column(String(16), nullable=False, default='', )
+    type_name = Column(String(16), nullable=False, default='', )
     active = Column(Integer, nullable=False, default=0, )

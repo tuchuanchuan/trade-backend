@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/favicon.ico">
+    <title>销售后台</title>
+    <link href="{{ static_url('bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ static_url('copyright/css/dashboard.css') }}" rel="stylesheet">
+  </head>
+  <body>
+    <form method="post" class="container-fluid row-offcanvas row-offcanvas-left" action="">
+      <div class="form-group">
+        <label>username</label>
+        <div class="input-group">
+          <input type="text" class="form-control" name="username">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>password</label>
+        <div class="input-group">
+          <input type="password" class="form-control" name="password">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% raw xsrf_form_html() %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+  </body>
+</html>
