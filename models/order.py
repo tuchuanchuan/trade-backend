@@ -1,4 +1,5 @@
 # coding: utf-8
+import uuid
 import datetime
 
 from sqlalchemy.orm import relationship
@@ -11,13 +12,30 @@ class Order(ORMBase):
     __tablename__ = 'order'
 
     id = Column(Integer, primary_key=True, nullable=False, )
-    order_id = Column(Integer, nullable=False, unique=True, )
+    long_id = Column(String(64), unique=True, default=None, )
 
     account_id = Column(Integer, ForeignKey('account.id'), nullable=False, )
     status = Column(Integer, nullable=False, default=0, )
+    pay_amount = Column(Integer, nullable=False, default=0, )
     remark = Column(String(512), nullable=False, default='', )
     created_datetime = Column(DateTime, default=datetime.datetime.now, )
     finished_datetime = Column(DateTime, )
+
+    def generate_order_id(self):
+        self.long_id = uuid.uuid4().hex
+
+    @property
+    def description(self):
+        pass
+
+    @property
+    def status_text(self):
+        pass
+
+    @property
+    def total_ammount(self):
+        """订单内所有项价格总和"""
+        pass
 
 
 class OrderDetail(ORMBase):

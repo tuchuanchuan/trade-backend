@@ -105,8 +105,10 @@ def upgrade():
     op.create_table(
         'order',
         sa.Column('id', sa.Integer(), primary_key=True, nullable=False, ),
+        sa.Column('long_id', sa.String(64), unique=True, ),
         sa.Column('account_id', sa.Integer(), nullable=False, ),
         sa.Column('status', sa.Integer(), nullable=False, server_default='0', ),
+        sa.Column('pay_amount', sa.Integer(), nullable=False, server_default='0', ),
         sa.Column('remark', sa.String(512), nullable=False, server_default='', ),
         sa.Column('created_datetime', sa.DateTime(), nullable=False, ),
         sa.Column('finished_datetime', sa.DateTime(), ),

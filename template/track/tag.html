@@ -1,0 +1,111 @@
+{% extends '../base/layout.html' %}
+{% block header %}
+{% include '../base/common_deps_css.html' %}
+<style> 
+.top-tag {
+    display: inline;
+    margin-left: 30px;
+    border-style: solid;
+    border-width: 1px;
+    padding: 5px 55px 5px 55px;
+}
+.current {
+    background: #c3e4f1;
+}
+</style>
+{% end %}
+
+{% block main %}
+<div ng-controller="tagCtrl">
+    <div class="top-tag" ng-repeat="tag in tags" ng-click="query(tag.id)" ng-class="get_tag_class(tag)">
+      <label>{{! tag.name }}</label>
+    </div>
+    <br>
+    <div style="margin-top: 30px; width: 300px">
+      <input ng-model="new_top_tag" placeholder="新增分类" style="margin-left: 30px;"><button ng-click="add_new_top_tag()" style="float: right">添加分类</button>
+    </div>
+    <hr></hr>
+    <div style="margin-top: 50px">
+      <ul ng-repeat="tag in sub_tags" ng-show="tag.active">
+        <li style="width: 300px">
+          <input ng-model="tag.name">
+          <button style="float: right" ng-click="delete(tag)">删除</button>
+          <button style="float: right" ng-click="edit(tag)">编辑</button>
+        </li>
+      </ul>
+    </div>
+    <div ng-show="sub_tags.length == 0">无</div>
+    <ul ng-show="current_father_id" style="margin-top: 50px">
+      <li style="width: 300px">
+        <input ng-model="new_tag" placeholder="新增">
+        <button style="float: right" ng-click="new()">新增</button>
+      </li>
+    </ul>
+</div>
+
+<script src="{{ static_url('sell_backend/js/config.js') }}"></script>
+<script src="{{ static_url('global/js/require.min.js') }}"></script>
+<script type="text/javascript">
+require(['app', 'bootstrap', 'left_bar', ], function(app) {
+  app.controller('tagCtrl', ['$scope', '$http', function($scope, $http) {
+    $scope.sub_tags = [];
+    $scope.current_father_id = 0;
+    $http.get('/track/tag/tag?father_id=0').success(function(ret) {
+        if (ret.ret === 0) {
+            $scope.tags = ret.tags
+        }
+    })
+    $scope.query = function(tag_id) {
+      $http.get('/track/tag/tag?father_id='+tag_id).success(function(ret){
+        if (ret.ret === 0) {
+          $scope.current_father_id = tag_id;
+          $scope.sub_tags = ret.tags;
+        }
+        else {
+          alert(ret.msg);
+        }
+      })
+    }
+    $scope.edit = function(tag) {
+      $http.post('/track/tag/tag/', tag).success(function(ret) {
+        if (ret.ret === 0) {
+          alert('ok');
+          $scope.query($scope.current_father_id);
+        }
+        else {
+          alert(ret.msg);
+        }
+      })
+    }
+    $scope.delete = function(tag) {
+      tag.active = 0;
+      $scope.edit(tag);
+    }
+    $scope.new = function() {
+      var new_tag = {
+        id: 0,
+        active: 1,
+        name: $scope.new_tag,
+        father_id: $scope.current_father_id
+      }
+      $scope.edit(new_tag);
+      $scope.new_tag = '';
+    }
+    $scope.add_new_top_tag = function() {
+        $http.post('/track/tag/tag/', {id: 0, father_id: 0, name: $scope.new_top_tag, active: 1}).success(function(ret) {
+          if (ret.ret === 0) {
+            location.reload();
+          }
+        })
+    }
+    $scope.get_tag_class = function(tag) {
+      if (tag.id == $scope.current_father_id) {
+        return 'current'
+      }
+      return ''
+    }
+  }])
+  angular.bootstrap(document, ['copyrightApp']);
+})
+</script>
+{% end %}

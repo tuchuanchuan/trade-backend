@@ -1,0 +1,80 @@
+{% extends '../base/layout.html' %}
+{% block header %}
+{% include '../base/common_deps_css.html' %}
+{% end %}
+
+{% block main %}
+<div ng-controller="orderCtrl">
+  <span>选择日期:</span>
+  <input type="date" ng-model="date" style="line-height: 20px;">
+  <input ng-model="search_key" ng-init="search_key=''">
+  <select ng-model="search_type" ng-init="search_type=''">
+    <option value="long_id">按订单号</option>
+    <option value="account_id">按用户id</option>
+  </select>
+  <button ng-click="query()">查询</button>
+  <table class="table table-strip">
+    <thead>
+      <th>订单号</th>
+      <th>订单内商品track_id及授权范围</th>
+      <th>买家id</th>
+      <th>订单状态</th>
+      <th>订单金额</th>
+      <th>实际支付金额</th>
+      <th>订单生成时间</th>
+      <th>订单日志</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="order in order_list">
+        <td>{{! order.long_id }}</td>
+        <td>{{! order.description }}</td>
+        <td>{{! order.account_id }}</td>
+        <td>{{! order.status_text }}</td>
+        <td>{{! order.total_amount }}</td>
+        <td>{{! order.pay_amount }}</td>
+        <td>{{! str(order.created_datetime) }}</td>
+        <td><a ng-href="{{! order.log_link }}">订单日志</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <cr-paging
+    current-page="current"
+    total-page="total"
+    pre-page="10"
+    after-page="10">
+  </cr-paging>
+</div>
+
+<script src="{{ static_url('sell_backend/js/config.js') }}"></script>
+<script src="{{ static_url('global/js/require.min.js') }}"></script>
+<script type="text/javascript">
+require(['app', 'bootstrap', 'left_bar', 'crPaging'], function(app) {
+  app.controller('orderCtrl', ['$scope', '$http', '$location', function($scope, $http, $location) {
+    $scope.current = 1;
+    $scope.totalPage = 10;
+    $scope.request = function(search_type, search_key, page) {
+      var args = 'search_type='+search_type+'&&search_key='+search_key+'&&page='+page;
+      $http.get('/order/query/?'+args).success(function(ret) {
+        if (ret.ret === 0) {
+          $scope.order_list = ret.order_list;
+          $scope.current = ret.current;
+          $scope.total = ret.page_count;
+        }
+        else {
+          alert(ret.msg);
+        }
+      })
+    }
+    $scope.$watch('current', function(){
+      if ($scope.current)
+        $scope.request($scope.search_type, $scope.search_key, $scope.current);
+    })
+    $scope.query = function() {
+      $scope.request($scope.search_type, $scope.search_key, $scope.current);
+    }
+    $scope.query();
+  }])
+  angular.bootstrap(document, ['copyrightApp']);
+})
+</script>
+{% end %}
