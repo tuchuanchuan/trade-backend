@@ -11,5 +11,5 @@ class Tag(ORMBase):
     id = Column(Integer, primary_key=True, nullable=False, )
 
     name = Column(String(16), nullable=False, default='', )
-    type_name = Column(String(16), nullable=False, default='', )
+    father_id = Column(Integer, ForeignKey('tag.id'), nullable=False, default=0, )
     active = Column(Integer, nullable=False, default=0, )

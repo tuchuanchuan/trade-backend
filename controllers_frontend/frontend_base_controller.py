@@ -3,16 +3,14 @@
 from tools.utils import cached_property
 from base_controller import BaseController as TradeBaseController
 
-from models.user import Admin
-
 
 class BaseController(TradeBaseController):
 
     @cached_property
     def current_user(self):
-        if 'trade_backend_id' in self.session:
-            user = self.orm_session.query(Admin).\
-                filter_by(id=self.session['trade_backend_id']).\
+        if 'trade_backend_sid' in self.session:
+            user = self.orm_session.query(Account).\
+                filter_by(id=self.session['sell_id']).\
                 first()
             return user
         return None

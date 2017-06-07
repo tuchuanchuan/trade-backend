@@ -1,0 +1,12 @@
+{% extends 'base/layout.html' %}
+{% block header %}
+{% include 'base/common_deps_css.html' %}
+{% end %}
+
+{% block main %}
+<div ng-controller="indexCtrl">
+</div>
+
+<script src="{{ static_url('sell_backend/js/config.js') }}"></script>
+<script data-main="{{ static_url('sell_backend/js/index.js') }}" src="{{ static_url('global/js/require.min.js') }}"></script>
+{% end %}

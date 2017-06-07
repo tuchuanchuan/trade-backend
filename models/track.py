@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
 
 from .base import ORMBase
 
@@ -17,18 +17,24 @@ class Track(ORMBase):
     lyricist = Column(String(512), nullable=False, default='', )
     isrc = Column(String(16), nullable=False, default='', )
     album_name = Column(String(64), nullable=False, default='', )
+    release_compaly = Column(String(64), nullable=False, default='', )
+    label = Column(String(64), nullable=False, default='', )
+    description = Column(Text, nullable=False, default='', )
 
-    file_path = Column(String, nullable=False, )
     duration = Column(Integer, nullable=False, default=0, )  # 时长，秒
-    listen_url = Column(String(256), nullable=False, default='', )  # 试听链接
-    wave_pic_url = Column(String(256), nullable=False, default='', )  # 波形图链接
+    file_path = Column(String(512), nullable=False, )
+    listen_url = Column(String(512), nullable=False, default='', )  # 试听链接
+    wave_pic_url = Column(String(512), nullable=False, default='', )  # 波形图链接
 
-    price = Column(Integer, nullable=False, default='', )  # 单价，分
+    price = Column(Integer, nullable=False, default=0, )  # 单价，分
     active = Column(Integer, nullable=False, default=0, )  # 标志上下架, 1:上架中
 
     # 用于记录歌曲来源，与业务无关
     copyright_id = Column(Integer, index=True, )
     is_oversea = Column(Integer, nullable=False, default=0, )
+
+    created_datetime = Column(DateTime, nullable=False, default=datetime.datetime.now)
+    updated_datetime = Column(DateTime, nullable=False, onupdate=datetime.datetime.now, default=datetime.datetime.now)
 
     tag_list = relationship(
         "Tag",

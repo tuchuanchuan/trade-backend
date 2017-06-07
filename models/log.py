@@ -15,6 +15,7 @@ class SearchHistory(ORMBase):
     account_id = Column(Integer, ForeignKey('account.id'), nullable=False, )
 
     keyword = Column(String(512), nullable=False, default='', )
+    chosen_track_id = Column(Integer, nullable=False, default=0, )
     search_datetime = Column(DateTime, default=datetime.datetime.now, nullable=False, )
 
     account = relationship('Account')

@@ -44,7 +44,7 @@ class Account(ORMBase, UserInterface):
 
     id = Column(Integer, primary_key=True, nullable=False, )
 
-    username = Column(String(32), nullable=False, default='', unique=True, )
+    username = Column(String(64), nullable=False, default='', unique=True, )
     nick = Column(String(32), nullable=False, default='', )
     hashed_password = Column(String(128), nullable=False, )  # hashed password
     password_salt = Column(String(64), nullable=False, )  # password salt
@@ -58,7 +58,7 @@ class Admin(ORMBase, UserInterface):
 
     id = Column(Integer, primary_key=True, nullable=False, )
 
-    username = Column(String(32), nullable=False, default='', unique=True, )
+    username = Column(String(64), nullable=False, default='', unique=True, )
     hashed_password = Column(String(128), nullable=False, )  # hashed password
     password_salt = Column(String(64), nullable=False, )  # password salt
     level = Column(Integer, nullable=False, default=0, )  # 后台用户权限

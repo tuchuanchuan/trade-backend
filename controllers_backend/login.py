@@ -26,9 +26,9 @@ class LoginController(BaseController):
 
         user = Admin.login(self.orm_session, username, password)
         if user and not user.forbidden:
-            self.session['sell_id'] = user.id
+            self.session['trade_backend_id'] = user.id
             self.set_secure_cookie(
-                'trade_sid',
+                'trade_backend_sid',
                 self.session.sessionid,
                 domain=settings.COOKIE_DOMAIN,
                 expires_days=None,
@@ -36,7 +36,7 @@ class LoginController(BaseController):
             user.last_login_ip = self.request.remote_ip
             user.last_login_time = time.time()
             self.session.save()
-            self.write(dict(ret=0, msg=u'ok', uri='/index'))
+            # self.write(dict(ret=0, msg=u'ok', uri='/index'))
             self.redirect('/index')
         else:
             raise HTTPError(403)

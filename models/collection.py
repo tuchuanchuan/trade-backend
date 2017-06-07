@@ -14,6 +14,7 @@ class Collection(ORMBase):
 
     account_id = Column(Integer, ForeignKey('account.id'), nullable=False, )
     track_id = Column(Integer, ForeignKey('track.id'), nullable=False, )
+    is_deleted = Column(Integer, nullable=False, default=0, )
 
     created_datetime = Column(Datetime, default=datetime.datetime.now)
 
